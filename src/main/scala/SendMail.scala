@@ -1,6 +1,6 @@
 object SendMail {
   import kernel.Parser._
-
+  val senderSample = getClass.getResourceAsStream("sample-sender-gmail.conf")
   val usage = """usage: sendmail [-hftcbs] [message]
  -h   print this message
  -f   [from],    sender information (typical config file)
@@ -9,9 +9,10 @@ object SendMail {
  -b   [bcc],     bcc addresses
  -s   [subject], mail subject
       [message], mail content
-
-Use ',' to separate multiple addresses, without spaces."""
-  val incorrectArgs = "Incorrect parameters, see help (Present -h)."
+Use ',' to separate multiple addresses, without spaces.
+Sender config sample:
+""" + io.Source.fromInputStream(senderSample).mkString
+  val incorrectArgs = "Incorrect parameters, see help (sendmail -h)."
 
   def main(args: Array[String]) = {
     println("SendMail program")
