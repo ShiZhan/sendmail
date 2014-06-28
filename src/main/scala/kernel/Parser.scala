@@ -4,7 +4,8 @@ object Parser extends helper.Logging {
   type Options = Map[Symbol, Any]
 
   def loadSender(from: String) = try {
-    val config = com.typesafe.config.ConfigFactory.load(from)
+    val configFile = new java.io.File(from)
+    val config = com.typesafe.config.ConfigFactory.parseFile(configFile)
     val hostName = config.getString("email.hostname")
     val smtpPort = config.getInt("email.port")
     val userName = config.getString("email.username")
