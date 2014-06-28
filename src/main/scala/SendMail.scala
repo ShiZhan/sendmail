@@ -1,6 +1,5 @@
 object SendMail {
-  import helper.OptParse._
-  import kernel.Mailer._
+  import kernel.Parser._
 
   val usage = """usage: sendmail [-hftcbs] [message]
  -h   print this message
@@ -11,20 +10,17 @@ object SendMail {
  -s   [subject], mail subject
       [message], mail content
 
-Use ',' to split multiple addresses, without spaces."""
+Use ',' to separate multiple addresses, without spaces."""
   val incorrectArgs = "Incorrect parameters, see help (Present -h)."
 
   def main(args: Array[String]) = {
     println("SendMail program")
     args.toList match {
       case "-h" :: Nil => println(usage)
-      case optList =>
-        parse(optList).toConfig match {
-          case Some(config) => send(Mail(from = (mailer, "wNotify"), to = Seq(""),
-            subject = "[wNotify] content changed",
-            message = "Hello World!"))
-          case _ => println(incorrectArgs)
-        }
+      case optList => parse(optList).options match {
+        case Some((from, to, cc, bc, subject, message)) => from.send(to, cc, bc, subject, message)
+        case _ => println(incorrectArgs)
+      }
     }
   }
 }
