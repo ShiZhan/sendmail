@@ -8,20 +8,20 @@ object SendMail {
  -c   [cc],      cc addresses
  -b   [bcc],     bcc addresses
  -s   [subject], mail subject
-      [message], mail content
+      [message], mail content (read from stdin if empty)
+
 Use ',' to separate multiple addresses, without spaces.
+
 Sender config sample:
+
 """ + io.Source.fromInputStream(senderSample).mkString
   val incorrectArgs = "Incorrect parameters, see help (sendmail -h)."
 
-  def main(args: Array[String]) = {
-    println("SendMail program")
-    args.toList match {
-      case "-h" :: Nil => println(usage)
-      case optList => parse(optList).options match {
-        case Some((from, to, cc, bc, subject, message)) => from.send(to, cc, bc, subject, message)
-        case _ => println(incorrectArgs)
-      }
+  def main(args: Array[String]) = args.toList match {
+    case "-h" :: Nil => println(usage)
+    case optList => parse(optList).options match {
+      case Some((from, to, cc, bc, subject, message)) => from.send(to, cc, bc, subject, message)
+      case _ => println(incorrectArgs)
     }
   }
 }

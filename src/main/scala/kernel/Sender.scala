@@ -1,22 +1,19 @@
 package kernel
 
-sealed abstract class MailType
-case object Plain extends MailType
-case object Rich extends MailType
-case object MultiPart extends MailType
-
 class Sender(
-  hostName: String, smtpPort: Int,
-  userName: String, password: String,
+  hostName: String, smtpPort: Int, userName: String, password: String,
   isSSL: Boolean, sender: String) extends helper.Logging {
   import org.apache.commons.mail._
 
+  sealed abstract class MailType
+  case object Plain extends MailType
+  case object Rich extends MailType
+  case object MultiPart extends MailType
+
   def send(
     to: Array[String], cc: Array[String], bcc: Array[String],
-    subject: String,
-    message: Option[String],
-    richMessage: Option[String] = None,
-    attachedFile: Option[(java.io.File)] = None) = {
+    subject: String, message: Option[String],
+    richMessage: Option[String] = None, attachedFile: Option[(java.io.File)] = None) = {
     val format =
       if (attachedFile.isDefined) MultiPart
       else if (richMessage.isDefined) Rich
@@ -25,6 +22,7 @@ class Sender(
     val content =
       if (message.isDefined) message.get
       else io.Source.fromInputStream(System.in).takeWhile(_ != 0.toChar).mkString
+
     val commonsMail: Email = format match {
       case Plain => new SimpleEmail().setMsg(content)
       case Rich => new HtmlEmail().setHtmlMsg(richMessage.get).setTextMsg(content)
