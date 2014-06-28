@@ -5,11 +5,13 @@ object SendMail {
   val usage = """usage: sendmail [-hftcbs] [message]
  -h   print this message
  -f   [from],    sender information (typical config file)
- -t   [to],      receiver address
- -c   [cc],      cc address
- -b   [bcc],     bcc address
+ -t   [to],      receiver addresses
+ -c   [cc],      cc addresses
+ -b   [bcc],     bcc addresses
  -s   [subject], mail subject
-      [message], mail content"""
+      [message], mail content
+
+Use ',' to split multiple addresses, without spaces."""
   val incorrectArgs = "Incorrect parameters, see help (Present -h)."
 
   def main(args: Array[String]) = {
