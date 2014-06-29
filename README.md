@@ -3,6 +3,8 @@ sendmail
 
 Simple email sender
 
+Type `java -jar sendmail-assembly-1.0.jar -h` to get more usage information.
+
 [Download link](http://goo.gl/iGrUjM)
 
 Reference
