@@ -1,10 +1,9 @@
 object SendMail {
   import kernel.Parser._
+  import helper.Resource
 
-  lazy val sample = getClass.getResourceAsStream("sample-sender-gmail.conf")
-  lazy val functions = getClass.getResourceAsStream("functions.txt")
   lazy val usage =
-    io.Source.fromInputStream(functions).mkString + io.Source.fromInputStream(sample).mkString
+    Resource.getString("functions.txt") + Resource.getString("sample-sender-gmail.conf")
 
   val incorrectArgs = "Incorrect parameters, see help (sendmail -h)."
 
