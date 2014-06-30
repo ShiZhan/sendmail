@@ -8,13 +8,13 @@ object Parser extends helper.Logging {
   def loadSender(from: String) = try {
     val configFile = new File(from)
     val config = com.typesafe.config.ConfigFactory.parseFile(configFile)
-    val hostName = config.getString("email.hostname")
-    val smtpPort = config.getInt("email.port")
+    val sender = config.getString("email.sender")
     val userName = config.getString("email.username")
     val password = config.getString("email.password")
+    val hostName = config.getString("email.hostname")
+    val smtpPort = config.getInt("email.port")
     val isSSL = config.getBoolean("email.is.ssl")
-    val sender = config.getString("email.sender")
-    Some(new Sender(hostName, smtpPort, userName, password, isSSL, sender))
+    Some(new Sender(sender, userName, password, hostName, smtpPort, isSSL = Some(isSSL)))
   } catch {
     case e: Exception =>
       logger.error("Sender config error")

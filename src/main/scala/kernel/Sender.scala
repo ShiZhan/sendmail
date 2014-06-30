@@ -1,8 +1,8 @@
 package kernel
 
 class Sender(
-  hostName: String, smtpPort: Int, userName: String, password: String,
-  isSSL: Boolean, sender: String) extends helper.Logging {
+  sender: String, userName: String, password: String, hostName: String, smtpPort: Int,
+  isSSL: Option[Boolean] = None, startTlsEnabled: Option[Boolean] = None) extends helper.Logging {
   import org.apache.commons.mail._
 
   sealed abstract class MailType
@@ -38,12 +38,11 @@ class Sender(
     commonsMail.setHostName(hostName)
     commonsMail.setSmtpPort(smtpPort)
     commonsMail.setAuthentication(userName, password)
-    commonsMail.setSSL(isSSL)
-
+    if (isSSL.isDefined) commonsMail.setSSL(isSSL.get)
+    if (startTlsEnabled.isDefined) commonsMail.setStartTLSEnabled(startTlsEnabled.get)
     to foreach (commonsMail.addTo)
     cc foreach (commonsMail.addCc)
     bcc foreach (commonsMail.addBcc)
-
     commonsMail.setFrom(sender, "")
     commonsMail.setSubject(subject)
     val result = commonsMail.send()
