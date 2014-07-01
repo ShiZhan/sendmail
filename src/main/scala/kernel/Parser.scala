@@ -3,8 +3,6 @@ package kernel
 object Parser extends helper.Logging {
   import java.io.File
 
-  type Options = Map[Symbol, Any]
-
   def loadSender(from: String) = try {
     val configFile = new File(from)
     val config = com.typesafe.config.ConfigFactory.parseFile(configFile)
@@ -13,8 +11,11 @@ object Parser extends helper.Logging {
     val password = config.getString("email.password")
     val hostName = config.getString("email.hostname")
     val smtpPort = config.getInt("email.port")
-    val isSSL = config.getBoolean("email.is.ssl")
-    Some(new Sender(sender, userName, password, hostName, smtpPort, isSSL = Some(isSSL)))
+    val ssl =
+      if (config.hasPath("email.ssl")) Some(config.getBoolean("email.ssl")) else None
+    val starttls =
+      if (config.hasPath("email.starttls")) Some(config.getBoolean("email.starttls")) else None
+    Some(new Sender(sender, userName, password, hostName, smtpPort, ssl = ssl, starttls = starttls))
   } catch {
     case e: Exception =>
       logger.error("Sender config error")
@@ -23,6 +24,8 @@ object Parser extends helper.Logging {
 
   def isValidEmail(email: String): Boolean =
     if ("""(?=[^\s]+)(?=(\w+)@([\w\.]+))""".r.findFirstIn(email) == None) false else true
+
+  type Options = Map[Symbol, Any]
 
   def parse(optList: List[String]): Options =
     optList match {

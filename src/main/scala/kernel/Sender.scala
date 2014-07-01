@@ -2,7 +2,7 @@ package kernel
 
 class Sender(
   sender: String, userName: String, password: String, hostName: String, smtpPort: Int,
-  isSSL: Option[Boolean] = None, startTlsEnabled: Option[Boolean] = None) extends helper.Logging {
+  ssl: Option[Boolean] = None, starttls: Option[Boolean] = None) extends helper.Logging {
   import org.apache.commons.mail._
 
   sealed abstract class MailType
@@ -38,8 +38,8 @@ class Sender(
     commonsMail.setHostName(hostName)
     commonsMail.setSmtpPort(smtpPort)
     commonsMail.setAuthentication(userName, password)
-    if (isSSL.isDefined) commonsMail.setSSL(isSSL.get)
-    if (startTlsEnabled.isDefined) commonsMail.setStartTLSEnabled(startTlsEnabled.get)
+    if (ssl.isDefined) commonsMail.setSSL(ssl.get)
+    if (starttls.isDefined) commonsMail.setStartTLSEnabled(starttls.get)
     to foreach (commonsMail.addTo)
     cc foreach (commonsMail.addCc)
     bcc foreach (commonsMail.addBcc)
