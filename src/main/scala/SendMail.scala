@@ -1,5 +1,6 @@
 object SendMail {
   import kernel.Parser._
+  import kernel.Configurator.senderConfGenerator
   import helper.Resource
 
   lazy val usage =
@@ -9,9 +10,10 @@ object SendMail {
 
   def main(args: Array[String]) = args.toList match {
     case "-h" :: Nil => println(usage)
+    case "-i" :: fileName :: Nil => senderConfGenerator(fileName)
     case optList => parse(optList).options match {
-      case Some((from, to, cc, bc, subject, message, attachment)) =>
-        from.send(to, cc, bc, subject, message, attachedFile = attachment)
+      case Some((senderConf, to, cc, bcc, subject, message, attachment)) =>
+        senderConf.toSender.send(to, cc, bcc, subject, message, attachedFile = attachment)
       case _ => println(incorrectArgs)
     }
   }

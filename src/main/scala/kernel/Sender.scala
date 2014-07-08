@@ -1,9 +1,8 @@
 package kernel
 
-class Sender(
-  sender: String, userName: String, password: String, hostName: String, smtpPort: Int,
-  ssl: Option[Boolean] = None, starttls: Option[Boolean] = None) extends helper.Logging {
+class Sender(senderConf: Configuration) extends helper.Logging {
   import org.apache.commons.mail._
+  val Configuration(sender, userName, password, hostName, smtpPort, ssl, starttls) = senderConf
 
   sealed abstract class MailType
   case object Plain extends MailType
@@ -40,11 +39,13 @@ class Sender(
     commonsMail.setAuthentication(userName, password)
     if (ssl.isDefined) commonsMail.setSSL(ssl.get)
     if (starttls.isDefined) commonsMail.setStartTLSEnabled(starttls.get)
+
     to foreach (commonsMail.addTo)
     cc foreach (commonsMail.addCc)
     bcc foreach (commonsMail.addBcc)
     commonsMail.setFrom(sender, "")
     commonsMail.setSubject(subject)
+
     val result = commonsMail.send()
 
     logger.info(result)

@@ -15,7 +15,7 @@ object Parser extends helper.Logging {
       if (config.hasPath("email.ssl")) Some(config.getBoolean("email.ssl")) else None
     val starttls =
       if (config.hasPath("email.starttls")) Some(config.getBoolean("email.starttls")) else None
-    Some(new Sender(sender, userName, password, hostName, smtpPort, ssl = ssl, starttls = starttls))
+    Some(Configuration(sender, userName, password, hostName, smtpPort, ssl = ssl, starttls = starttls))
   } catch {
     case e: Exception =>
       logger.error("Sender config error")
@@ -31,7 +31,7 @@ object Parser extends helper.Logging {
     optList match {
       case Nil => Map()
       case "-f" :: from :: more => loadSender(from) match {
-        case Some(sender) => parse(more) ++ Map('from -> sender)
+        case Some(senderConf) => parse(more) ++ Map('from -> senderConf)
         case _ => parse(more)
       }
       case "-t" :: to :: more =>
@@ -59,7 +59,7 @@ object Parser extends helper.Logging {
     val subject = o.get('subject) match { case Some(s: String) => s; case _ => "Untitled" }
     val message = o.get('message) match { case Some(m: String) => Some(m); case _ => None }
     def options = o.get('from) match {
-      case Some(from: Sender) if o.contains('to) =>
+      case Some(from: Configuration) if o.contains('to) =>
         Some(from, to, cc, bc, subject, message, attachment)
       case _ => None
     }
