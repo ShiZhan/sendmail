@@ -8,7 +8,7 @@ object Parser extends helper.Logging {
     val config = com.typesafe.config.ConfigFactory.parseFile(configFile)
     val sender = config.getString("email.sender")
     val userName = config.getString("email.username")
-    val password = config.getString("email.password")
+    val password = helper.Encryption.decrypt(config.getString("email.password"))
     val hostName = config.getString("email.hostname")
     val smtpPort = config.getInt("email.port")
     val ssl =
