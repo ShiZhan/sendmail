@@ -3,9 +3,7 @@ object SendMail {
   import kernel.Configurator.senderConfGenerator
   import helper.Resource
 
-  lazy val usage =
-    Resource.getString("functions.txt") + Resource.getString("sample-sender-gmail.conf")
-
+  lazy val usage = Resource.getString("functions.txt")
   val incorrectArgs = "Incorrect parameters, see help (sendmail -h)."
 
   def main(args: Array[String]) = args.toList match {

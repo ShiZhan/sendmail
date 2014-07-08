@@ -17,5 +17,3 @@ Note:
 4.  If 'subject' option is empty, a default value will be used.
 5.  Sender information:
     [sender, username, password, hostname, port, ssl, starttls]
-
-    Sample below:

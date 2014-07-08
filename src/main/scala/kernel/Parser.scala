@@ -15,7 +15,7 @@ object Parser extends helper.Logging {
       if (config.hasPath("email.ssl")) Some(config.getBoolean("email.ssl")) else None
     val starttls =
       if (config.hasPath("email.starttls")) Some(config.getBoolean("email.starttls")) else None
-    Some(Configuration(sender, userName, password, hostName, smtpPort, ssl = ssl, starttls = starttls))
+    Some(Configuration(sender, userName, password, hostName, smtpPort, ssl, starttls))
   } catch {
     case e: Exception =>
       logger.error("Sender config error")
