@@ -37,7 +37,7 @@ class Sender(senderConf: Configuration) extends helper.Logging {
     commonsMail.setHostName(hostName)
     commonsMail.setSmtpPort(smtpPort)
     commonsMail.setAuthentication(userName, password)
-    if (ssl.isDefined) commonsMail.setSSL(ssl.get)
+    if (ssl.isDefined) commonsMail.setSSLOnConnect(ssl.get)
     if (starttls.isDefined) commonsMail.setStartTLSEnabled(starttls.get)
 
     to foreach (commonsMail.addTo)
