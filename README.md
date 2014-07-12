@@ -5,7 +5,7 @@ Simple email sender
 
 Type `java -jar sendmail-assembly-1.0.jar -h` to get more usage information.
 
-Prepare configuration file for SMTP before use.
+Use `java -jar sendmail-assembly-1.0.jar -i` to prepare configuration file for SMTP.
 
 [Download link](http://goo.gl/iGrUjM)
 
