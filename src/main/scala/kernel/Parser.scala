@@ -2,6 +2,7 @@ package kernel
 
 object Parser extends helper.Logging {
   import java.io.File
+  import util.Try
 
   def loadSender(from: String) = try {
     val configFile = new File(from)
@@ -11,15 +12,11 @@ object Parser extends helper.Logging {
     val password = helper.Encryption.decrypt(config.getString("email.password"))
     val hostName = config.getString("email.hostname")
     val smtpPort = config.getInt("email.port")
-    val ssl =
-      if (config.hasPath("email.ssl")) Some(config.getBoolean("email.ssl")) else None
-    val starttls =
-      if (config.hasPath("email.starttls")) Some(config.getBoolean("email.starttls")) else None
+    val ssl = Try(Some(config.getBoolean("email.ssl"))).getOrElse(None)
+    val starttls = Try(Some(config.getBoolean("email.starttls"))).getOrElse(None)
     Some(Configuration(sender, userName, password, hostName, smtpPort, ssl, starttls))
   } catch {
-    case e: Exception =>
-      logger.error("Sender config error")
-      None
+    case e: Exception => { logger.error("Sender config error"); None }
   }
 
   def isValidEmail(email: String): Boolean =
