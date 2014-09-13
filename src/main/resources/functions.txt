@@ -1,7 +1,7 @@
 Usage: sendmail [-hiftcbs] [message]
 
  -h   print this message
- -i   [file name],  initialize sender configuration file from console
+ -i   [file name],  create sender configuration file from console
  -f   [from],       load sender configuration file
  -t   [to],         receiver addresses
  -c   [cc],         cc addresses
