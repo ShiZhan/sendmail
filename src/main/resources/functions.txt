@@ -1,7 +1,7 @@
-Usage: sendmail [-hiftcbs] [message]
+Usage: sendmail [-hiftcbas] [message]
 
  -h   print this message
- -i   [file name],  create sender configuration file from console
+ -i   [file name],  create sender configuration file interactively
  -f   [from],       load sender configuration file
  -t   [to],         receiver addresses
  -c   [cc],         cc addresses
@@ -12,8 +12,8 @@ Usage: sendmail [-hiftcbs] [message]
 
 Note:
 1.  Use ',' to separate multiple addresses for 'to', 'cc' & 'bcc', without spaces.
-2.  Allowed attachment size varies, depend on SMTP server in use.
+2.  Allowed attachment size varies, depends on SMTP server restriction.
 3.  If 'message' option is empty, it will be gethered from stdin.
 4.  If 'subject' option is empty, a default value will be used.
-5.  Sender information:
+5.  Sender configuration file content:
     [sender, username, password, hostname, port, ssl, starttls]
