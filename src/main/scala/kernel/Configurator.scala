@@ -1,8 +1,8 @@
 package kernel
 
 case class Configuration(
-  sender: String, userName: String, password: String, hostName: String, smtpPort: Int,
-  ssl: Option[Boolean] = None, starttls: Option[Boolean] = None) {
+    sender: String, userName: String, password: String, hostName: String, smtpPort: Int,
+    ssl: Option[Boolean] = None, starttls: Option[Boolean] = None) {
   def toSender = new Sender(this)
 
   override def toString = {
@@ -19,17 +19,11 @@ email.hostname="$hostName"
 email.port=$smtpPortString
 $sslString$starttlsString"""
   }
-
-  def saveTo(fileName: String) = {
-    val pw = new java.io.PrintWriter(new java.io.File(fileName))
-    pw.print(toString)
-    pw.close
-  }
 }
 
 object Configurator {
-  def readLine =
-    io.Source.fromInputStream(System.in).takeWhile(_ != '\n').mkString
+  import java.io.{ File, PrintWriter }
+  import scala.io.StdIn.readLine
 
   def senderConfGenerator(fileName: String) = {
     print("Sender (foo@gmail.com):")
@@ -50,6 +44,10 @@ object Configurator {
     print("StartTLS (true|false):")
     val starttls = try { Some(readLine.toBoolean) } catch { case e: Exception => None }
 
-    Configuration(sender, userName, password, hostName, smtpPort, ssl, starttls).saveTo(fileName)
+    val conf = Configuration(sender, userName, password, hostName, smtpPort, ssl, starttls)
+
+    val pw = new PrintWriter(new File(fileName))
+    pw.print(conf.toString)
+    pw.close
   }
 }

@@ -49,15 +49,15 @@ object Parser extends helper.Logging {
     }
 
   implicit class OptionsWrapper(o: Options) {
-    val to = o.get('to) match { case Some(t: Array[String]) => t; case _ => Array[String]() }
-    val cc = o.get('cc) match { case Some(c: Array[String]) => c; case _ => Array[String]() }
-    val bc = o.get('bc) match { case Some(b: Array[String]) => b; case _ => Array[String]() }
+    val to = o.get('to) match { case Some(t: Array[String]) => t; case _ => Array.empty[String] }
+    val cc = o.get('cc) match { case Some(c: Array[String]) => c; case _ => Array.empty[String] }
+    val bc = o.get('bc) match { case Some(b: Array[String]) => b; case _ => Array.empty[String] }
     val attachment = o.get('attachment) match { case Some(f: File) => Some(f); case _ => None }
     val subject = o.get('subject) match { case Some(s: String) => s; case _ => "Untitled" }
     val message = o.get('message) match { case Some(m: String) => Some(m); case _ => None }
-    def options = o.get('from) match {
+    def options() = o.get('from) match {
       case Some(from: Configuration) if o.contains('to) =>
-        Some(from, to, cc, bc, subject, message, attachment)
+        Some((from, to, cc, bc, subject, message, attachment))
       case _ => None
     }
   }
